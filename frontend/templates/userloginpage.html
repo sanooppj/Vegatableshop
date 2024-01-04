@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <style>
+        :root {
+            --primary-color: #ca984e;
+            --white: #ffffff;
+            --gray: #efefef;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+
+        * {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            overflow: hidden;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Adjusted to bring the box to the center-top */
+            position: relative; /* Added to make the image positioning relative to the body */
+        }
+
+        .logo {
+            position: fixed; /* Fixed position */
+            top: 0;
+            left: 0;
+            margin: 10px;
+            margin-left: 70px;
+            width:700px; /* Adjust the margin as needed */
+        }
+
+        .form-wrapper {
+            width: 100%;
+            max-width: 28rem;
+            position: relative;
+            margin-top: 17rem; /* Adjusted margin-top */
+        }
+
+        .form {
+            padding: 1rem;
+            background-color: var(--white);
+            border-radius: 1.5rem;
+            width: 100%;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            position: absolute;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .input-group {
+            position: relative;
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        .input-group i {
+            position: absolute;
+            top: 50%;
+            left: 1rem;
+            transform: translateY(-50%);
+            font-size: 1.4rem;
+            color: var(--gray);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem 3rem;
+            font-size: 1rem;
+            background-color: var(--gray);
+            border-radius: .5rem;
+            border: 0.125rem solid var(--white);
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border: 0.125rem solid var(--primary-color);
+        }
+
+        .form button {
+    cursor: pointer;
+    width: 100%;
+    padding: .6rem 0;
+    border-radius: .5rem;
+    border: none;
+
+    background-color: #ca984e; /* Hover background color */
+    color: black;
+    font-size: 1.2rem;
+    outline: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.form button:hover {
+    background-color: black; /* Updated background color */
+    color: #ca984e; /* Updated text color */
+     /* Hover text color */
+}
+
+
+        .form p {
+            margin: 1rem 0;
+            font-size: .7rem;
+        }
+
+        .pointer {
+            cursor: pointer;
+        }
+
+        .form.sign-up {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .show-sign-up .form.sign-up {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-wrapper">
+        <div class="form sign-in">
+           <form method="POST" action="{% url 'userlogin' %}" enctype="multipart/form-data">
+           {% csrf_token %}
+
+            <div class="input-group">
+                <i class='bx bxs-user'></i>
+                <input type="text" placeholder="Username" name="name">
+            </div>
+            <div class="input-group">
+                <i class='bx bxs-lock-alt'></i>
+                <input type="password" placeholder="Password" name="password">
+            </div>
+            <button type="submit">
+                Sign in
+            </button>
+            <p>
+                <b>
+                    Forgot password?
+                </b>
+            </p>
+            <p>
+                <span>
+                    Don't have an account?
+                </span>
+                <b class="pointer" onclick="toggleForm()">
+                    Sign up here
+                </b>
+            </p>
+                 </form>
+        </div>
+
+        <div class="form sign-up">
+            <form method="POST" action="{% url 'userloginpost' %}" enctype="multipart/form-data" >
+								{% csrf_token %}
+            <div class="input-group">
+                <i class='bx bxs-user'></i>
+                <input type="text" placeholder="Username" name="name">
+            </div>
+            <div class="input-group">
+                <i class='bx bx-mail-send'></i>
+                <input type="email" placeholder="Email" name="email">
+            </div>
+            <div class="input-group">
+                <i class='bx bxs-lock-alt'></i>
+                <input type="password" placeholder="Password" name="password">
+            </div>
+            <div class="input-group">
+                <i class='bx bxs-lock-alt'></i>
+                <input type="password" placeholder="Confirm password" name="cpassword">
+            </div>
+            <button type="submit">
+                Sign up
+            </button>
+            <p>
+                <span>
+                    Already have an account?
+                </span>
+                <b class="pointer" onclick="toggleForm()">
+                    Sign in here
+                </b>
+            </p>
+            </form>
+        </div>
+    </div>
+
+   <script>
+    function toggleForm() {
+        const formWrapper = document.querySelector('.form-wrapper');
+        formWrapper.classList.toggle('show-sign-up');
+
+    }
+</script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% if messages %}
+    {% for i in messages %}
+          {% if i.tags == 'warning' %}
+                 <script>
+                     swal('{{i}}','','warning')
+                 </script>
+{% elif i.tags == 'error' %}
+                  <script>
+                     swal('{{i}}','','error')
+                 </script>
+{% elif i.tags == 'success' %}
+                   <script>
+                     swal('{{i}}','','success')
+                 </script>
+{% else %}
+                <script>
+                     swal('{{i}}','','info')
+                </script>
+{%endif%}
+{%endfor%}
+{%endif%}
+
+</body>
+
+</html>

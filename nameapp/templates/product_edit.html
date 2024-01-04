@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+{% extends 'main_page.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+          img
+            width: 100px; /* Set the fixed width for the image */
+            height: 100px; /* Set the fixed height for the image */
+            object-fit: cover; /* Cover the whole container while maintaining aspect ratio */
+            border-radius: 5px; /* Add a border-radius for a slightly rounded appearance */
+        }
+    </style>
+</head>
+<body>
+<form method="POST" action="{% url 'product_update' p_id=product.id %}" enctype="multipart/form-data">
+    {%csrf_token%}
+
+<div class="col-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h3 class="card-title">Product information</h3>
+                      <div class="form-group">
+                        <label for=>Category Name</label>
+                     <select class="form-control" id="category"  name="category" required>
+                        <option >{{product.category}}</option>
+                        {% for i in cat %}
+                        <option >{{i.name}}</option>
+                        {%endfor%}
+                    </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="">Product Name</label>
+                        <input type="text" class="form-control" name="name" value="{{product.name}}" id="" placeholder="Product name">
+                      </div>
+                      <div class="form-group">
+                        <label for="">Price</label>
+                        <input type="number" class="form-control" value="{{product.price}}" id="" name="price" placeholder="price">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="exampleTextarea1">Description</label>
+                        <textarea class="form-control" id="exampleTextarea1" name="description" placeholder="write Anything!.." rows="4">{{product.description}}</textarea>
+                      </div>
+                      <div class="form-group">
+                            <img src="{{product.image.url}}" width="100px" height="100px" style="border-radius: 5px;">
+                </div>
+
+                     <div class="form-group">
+                       <label for="exampleTextarea1">Product Image</label>
+                    <input type="file" name="image" class="form-control">
+                </div>
+                      <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                      <button class="btn btn-light">Cancel</button>
+
+                  </div>
+                </div>
+              </div>
+     </form>
+</body>
+</html>
+{%endblock%}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+{% extends 'main_page.html' %}
+{% load static %}
+
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        th {
+            background-color: rgb(211, 211, 229);
+            text-align: center; /* Center align the content */
+        }
+
+        td {
+            text-align: center; /* Center align the content */
+            position: relative; /* Make the position relative for absolute positioning of action-text */
+        }
+
+        .action-container {
+            position: relative; /* Make the position relative for absolute positioning of action-text */
+        }
+
+        .action-text {
+            display: none;
+            position: absolute;
+            top: -15px; /* Adjust the top position to move the text above the buttons */
+            left: 50%; /* Center the text above the buttons */
+            transform: translateX(-50%); /* Center the text above the buttons */
+            background-color: black;
+            color: white;
+            padding: 5px;
+            border-radius: 3px;
+        }
+
+        .action-container:hover .action-text {
+            display: block; /* Show the action text when hovering over the action container */
+        }
+    </style>
+</head>
+<body>
+
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h3 style="color: blue; margin-bottom: 20px; margin-top: -20px;">Product Details</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Category Name</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Description</th>
+                        <th>Image</th>
+                        <th colspan="2">Actions</th>
+                    </tr>
+                </thead>
+                {% for i in data %}
+                <tbody>
+                    <tr>
+                        <td>{{ i.category }}</td>
+                        <td>{{ i.name }}</td>
+                        <td>{{ i.price }}</td>
+                        <td>{{ i.description }}</td>
+                        <td><img src="{{ i.image.url }}" alt="Category Image"></td>
+                        <td class="action-container">
+                            <a href="{% url 'product_edit' p_id=i.id %}">
+                                <img src="{% static 'adminstyle/pencil.png' %}" alt="Edit Icon" style="width: 20px; height: 20px;">
+                                <span class="action-text">Edit</span>
+                            </a>
+                        </td>
+                        <td class="action-container">
+                            <a href="{% url 'product_delete' p_id=i.id %}">
+                                <img src="{% static 'adminstyle/trash_icon.png' %}" alt="Delete Icon" style="width: 18px; height: 18px;">
+                                <span class="action-text">Delete</span>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% if messages %}
+    {% for i in messages %}
+          {% if i.tags == 'warning' %}
+                 <script>
+                     swal('{{i}}','','warning')
+                 </script>
+{% elif i.tags == 'error' %}
+                  <script>
+                     swal('{{i}}','','error')
+                 </script>
+{% elif i.tags == 'success' %}
+                   <script>
+                     swal('{{i}}','','success')
+                 </script>
+{% else %}
+                <script>
+                     swal('{{i}}','','info')
+                </script>
+{%endif%}
+{%endfor%}
+{%endif%}
+</body>
+</html>
+{% endblock %}

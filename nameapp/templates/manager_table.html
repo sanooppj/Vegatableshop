@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+{% extends 'main_page.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+         th {
+            background-color: rgb(211, 211, 229);
+            text-align: center; /* Center align the content */
+        }
+
+        td {
+            text-align: center; /* Center align the content */
+        }
+        /* Add this style to set a fixed size for images */
+<!--        table.table-bordered img {-->
+<!--            width: 100px; /* Set the fixed width for the image */-->
+<!--            height: 100px; /* Set the fixed height for the image */-->
+<!--            object-fit: cover; /* Cover the whole container while maintaining aspect ratio */-->
+<!--            border-radius: 5px; /* Add a border-radius for a slightly rounded appearance */-->
+<!--        }-->
+    </style>
+</head>
+<body>
+
+
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h3 style="color: blue;  margin-bottom: 20px; margin-top: -20px;">Category Details</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Category Name</th>
+                        <th>Description</th>
+                        <th>Image</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                {% for i in data %}
+                <tbody>
+                    <tr>
+                        <td>{{ i.name }}</td>
+                        <td>{{ i.description }}</td>
+                        <td><img src="{{ i.image.url }}" alt="Category Image"></td>
+                        <td>
+                            <a href="{% url 'manager_edit' c_id=i.id %}">
+                                <button type="button"  class="btn btn-success">Edit</button>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{% url 'manager_delete' c_id=i.id %}">
+                                <button type="button" class="btn btn-danger">Delete</button>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% if messages %}
+    {% for i in messages %}
+          {% if i.tags == 'warning' %}
+                 <script>
+                     swal('{{i}}','','warning')
+                 </script>
+{% elif i.tags == 'error' %}
+                  <script>
+                     swal('{{i}}','','error')
+                 </script>
+{% elif i.tags == 'success' %}
+                   <script>
+                     swal('{{i}}','','success')
+                 </script>
+{% else %}
+                <script>
+                     swal('{{i}}','','info')
+                </script>
+{%endif%}
+{%endfor%}
+{%endif%}
+</body>
+</html>
+{% endblock %}
